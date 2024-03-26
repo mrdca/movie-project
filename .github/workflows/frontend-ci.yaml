@@ -1,0 +1,105 @@
+name: Movie Project - Frontend - CI
+
+on:
+  pull_request:  # Triggers the workflow on pull requests
+    branches:
+      - main  # Only for the main branch
+    paths:
+      - 'starter/frontend/**'  # Only for changes within the 'starter/frontend' directory
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
+  npm:  # Job to install dependencies using npm
+    runs-on: ubuntu-latest  # Runs on the latest version of Ubuntu
+
+    steps:
+    
+    - name: Checkout Repository  # Step to checkout the repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js  # Step to set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'  # Specifies Node.js version 20
+
+    - name: Install Dependencies  # Step to install dependencies using npm ci
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm ci  # Install dependencies with exact versions from package-lock.json
+
+  lint:  # Job to lint code using ESLint
+    runs-on: ubuntu-latest  # Runs on the latest version of Ubuntu
+
+    steps:
+    - name: Checkout Repository  # Step to checkout the repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js  # Step to set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'  # Specifies Node.js version 20
+
+    - name: Install Dependencies  # Step to install dependencies using npm install
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm install  # Install dependencies
+
+    - name: Install ESLint  # Step to install ESLint
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm install eslint --save-dev  # Install ESLint as a development dependency
+
+    - name: Lint Code  # Step to lint the code using ESLint
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm run lint  # Run ESLint to lint the code
+
+  test:  # Job to run tests
+    runs-on: ubuntu-latest  # Runs on the latest version of Ubuntu
+
+    steps:
+    - name: Checkout Repository  # Step to checkout the repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js  # Step to set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'  # Specifies Node.js version 20
+
+    - name: Install Dependencies  # Step to install dependencies using npm ci
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm ci  # Install dependencies with exact versions from package-lock.json
+
+    - name: Run Tests  # Step to run tests using npm test
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm test  # Run tests
+
+    - name: Simulate running tests  # Step to simulate running tests with a CI environment variable set
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        CI=true npm test  # Set CI=true environment variable and run tests
+
+  build:  # Job to build the application
+    runs-on: ubuntu-latest  # Runs on the latest version of Ubuntu
+    needs: [lint, test]  # Depends on the completion of 'lint' and 'test' jobs  
+
+    steps:
+    - name: Checkout Repository  # Step to checkout the repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js  # Step to set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'  # Specifies Node.js version 20
+
+    - name: Install Dependencies  # Step to install dependencies using npm ci
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm ci  # Install dependencies with exact versions from package-lock.json
+
+    - name: Run NPM Command  # Step to run an npm command (test in this case)
+      run: |
+        cd starter/frontend  # Change directory to 'starter/frontend'
+        npm run test  # Run the specified npm command
