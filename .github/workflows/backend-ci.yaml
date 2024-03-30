@@ -1,4 +1,4 @@
-name: Backend CI
+name: Movie Project - Backend - CI
 
 on:
   pull_request:
