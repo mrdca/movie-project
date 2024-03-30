@@ -20,7 +20,7 @@ jobs:
     - name: Set up Node.js  # Step to set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Specifies Node.js version 20
+        node-version: '18'  # Specifies Node.js version 18
 
     - name: Install Dependencies  # Step to install dependencies using npm ci
       run: |
@@ -37,7 +37,7 @@ jobs:
     - name: Set up Node.js  # Step to set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Specifies Node.js version 20
+        node-version: '18'  # Specifies Node.js version 18
 
     - name: Install Dependencies  # Step to install dependencies using npm install
       run: |
@@ -64,7 +64,7 @@ jobs:
     - name: Set up Node.js  # Step to set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Specifies Node.js version 20
+        node-version: '18'  # Specifies Node.js version 18
 
     - name: Install Dependencies  # Step to install dependencies using npm ci
       run: |
@@ -92,7 +92,7 @@ jobs:
     - name: Set up Node.js  # Step to set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '20'  # Specifies Node.js version 20
+        node-version: '18'  # Specifies Node.js version 18
 
     - name: Install Dependencies  # Step to install dependencies using npm ci
       run: |
