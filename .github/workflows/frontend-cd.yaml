@@ -123,7 +123,7 @@ jobs:
         docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Push Docker image to ECR
 
     - name: Check if Docker image is uploaded to ECR
-    run: |  # Check if the Docker image exists in ECR
+    run: |
         if aws ecr describe-images --repository-name frontend | grep -q "imageTag\": \"latest\""; then
           echo "Docker image uploaded to ECR"
         else
