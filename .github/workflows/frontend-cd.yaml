@@ -123,14 +123,13 @@ jobs:
         docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Push Docker image to ECR
 
     - name: Check if Docker image is uploaded to ECR
-    run: |
-      # Check if the Docker image exists in ECR
-      if aws ecr describe-images --repository-name frontend | grep -q "imageTag\": \"latest\""; then
-        echo "Docker image uploaded to ECR"
-      else
-        echo "Docker image not uploaded to ECR, failing pipeline"
-        exit 1
-      fi
+    run: |  # Check if the Docker image exists in ECR
+        if aws ecr describe-images --repository-name frontend | grep -q "imageTag\": \"latest\""; then
+          echo "Docker image uploaded to ECR"
+        else
+          echo "Docker image not uploaded to ECR, failing pipeline"
+          exit 1
+        fi
           
     - name: Install kubectl  # Step to install kubectl
     run: |  # Define the shell command to be executed
