@@ -1,119 +1,119 @@
 name: Movie Project - Backend - CI
 
 on:
-  pull_request:
+  pull_request:  # Trigger the workflow on pull requests to the main branch in the specified directory
     branches:
       - main
     paths:
       - 'starter/backend/**'
-  workflow_dispatch:
+  workflow_dispatch:  # Allow manual triggering of the workflow
 
-jobs:
-  lint:
-    runs-on: ubuntu-latest
+jobs:  # Define jobs to be executed in the workflow
+  lint:  # Job for linting the code
+    runs-on: ubuntu-latest  # Execute on the latest version of Ubuntu
 
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+    steps:  # Steps to be executed in the lint job
+    - name: Checkout Repository  # Step to checkout the repository
+      uses: actions/checkout@v4  # Use the GitHub Action to checkout the repository
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - name: Set up Python  # Step to set up Python
+      uses: actions/setup-python@v2  # Use the GitHub Action to set up Python
       with:
-        python-version: '3.10'
+        python-version: '3.10'  # Specify Python version to use
 
-    - name: Install pipenv
+    - name: Install pipenv  # Step to install pipenv
       run: |
-        python -m pip install pipenv
+        python -m pip install pipenv  # Install pipenv using pip
 
-    - name: Install Dependencies
+    - name: Install Dependencies  # Step to install project dependencies
       run: |
-        cd starter/backend
-        pipenv install
+        cd starter/backend  # Change directory to the backend directory
+        pipenv install  # Install project dependencies using pipenv
     
-    - name: Install flake8
+    - name: Install flake8  # Step to install flake8
       run: |
-        cd starter/backend
-        pipenv run pip install flake8
+        cd starter/backend  # Change directory to the backend directory
+        pipenv run pip install flake8  # Install flake8 using pipenv
 
-    - name: Lint Code
+    - name: Lint Code  # Step to lint the code using flake8
       run: |
-        cd starter/backend
-        pipenv run flake8
+        cd starter/backend  # Change directory to the backend directory
+        pipenv run flake8  # Run flake8 to lint the code
 
-    - name: Lint Code
+    - name: Lint Code (Fail Workflow on Lint Failure)  # Step to fail the workflow if linting fails
       run: |
-        cd starter/backend
-        pipenv run lint
-
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-
-    - name: Install pipenv
-      run: |
-        python -m pip install pipenv
-
-    - name: Install Dependencies
-      run: |
-        cd starter/backend
-        pipenv install
-
-    - name: Run Tests
-      run: |
-        cd starter/backend
-        pipenv run test
-
-  build:
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-
-    - name: Install pipenv
-      run: |
-        python -m pip install pipenv
-
-    - name: Install Dependencies
-      run: |
-        cd starter/backend
-        pipenv install
-
-    - name: Install flake8
-      run: |
-        cd starter/backend
-        pipenv run pip install flake8
-
-    - name: Lint Code
-      run: |
-        cd starter/backend
-        pipenv run flake8
-
-    - name: Lint Code (Fail Workflow on Lint Failure)
-      run: |
-        cd starter/backend
-        pipenv run lint-fail
+        cd starter/backend  # Change directory to the backend directory
+        pipenv run lint-fail  # Run lint-fail to check linting status
       continue-on-error: true  # Continue the workflow even if linting fails
 
-    - name: Fail Workflow on Lint Failure
-      if: ${{ failure() }}  # This step will only run if the previous step failed
+    - name: Fail Workflow on Lint Failure  # Step to fail the workflow if linting fails
+      if: ${{ failure() }}  # Condition to run this step if the previous step failed
       run: exit 1  # Exit the workflow with a failure status code
 
-    - name: Build Docker App
+  test:  # Job for running tests
+    runs-on: ubuntu-latest  # Execute on the latest version of Ubuntu
+
+    steps:  # Steps to be executed in the test job
+    - name: Checkout Repository  # Step to checkout the repository
+      uses: actions/checkout@v4  # Use the GitHub Action to checkout the repository
+
+    - name: Set up Python  # Step to set up Python
+      uses: actions/setup-python@v2  # Use the GitHub Action to set up Python
+      with:
+        python-version: '3.10'  # Specify Python version to use
+
+    - name: Install pipenv  # Step to install pipenv
       run: |
-        cd starter/backend
-        docker build -t frontend .
+        python -m pip install pipenv  # Install pipenv using pip
+
+    - name: Install Dependencies  # Step to install project dependencies
+      run: |
+        cd starter/backend  # Change directory to the backend directory
+        pipenv install  # Install project dependencies using pipenv
+
+    - name: Run Tests  # Step to run tests
+      run: |
+        cd starter/backend  # Change directory to the backend directory
+        pipenv run test  # Run tests using pipenv
+
+  build:  # Job for building the application
+    runs-on: ubuntu-latest  # Execute on the latest version of Ubuntu
+    needs: [lint, test]  # This ensures 'build' only runs if 'lint' and 'test' jobs succeed
+
+    steps:  # Steps to be executed in the build job
+    - name: Checkout Repository  # Step to checkout the repository
+      uses: actions/checkout@v4  # Use the GitHub Action to checkout the repository
+
+    - name: Set up Python  # Step to set up Python
+      uses: actions/setup-python@v2  # Use the GitHub Action to set up Python
+      with:
+        python-version: '3.10'  # Specify Python version to use
+
+    - name: Install pipenv  # Step to install pipenv
+      run: |
+        python -m pip install pipenv  # Install pipenv using pip
+
+    - name: Install Dependencies  # Step to install project dependencies
+      run: |
+        cd starter/backend  # Change directory to the backend directory
+        pipenv install  # Install project dependencies using pipenv
+
+    - name: Install flake8  # Step to install flake8
+      run: |
+        cd starter/backend  # Change directory to the backend directory
+        pipenv run pip install flake8  # Install flake8 using pipenv
+
+    - name: Lint Code  # Step to lint the code using flake8
+      run: |
+        cd starter/backend  # Change directory to the backend directory
+        pipenv run flake8  # Run flake8 to lint the code
+
+    - name: Lint Code (Fail Workflow on Lint Failure)  # Step to fail the workflow if linting fails
+      run: |
+        cd starter/backend  # Change directory to the backend directory
+        pipenv run lint-fail  # Run lint-fail to check linting status
+      continue-on-error: true  # Continue the workflow even if linting fails
+
+    - name: Fail Workflow on Lint Failure  # Step to fail the workflow if linting fails
+      if: ${{ failure() }}  # Condition to run this step if the previous step failed
+      run: exit 1  # Exit the workflow with a failure status code
