@@ -1,5 +1,4 @@
-name: Movie Project - Backend - CD  # Workflow name
-
+name: Movie Project - Backend - CD
 on:
   push:  # Trigger the workflow on code pushes to the main branch in the specified directory
     branches:
