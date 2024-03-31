@@ -123,41 +123,41 @@ jobs:
           docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Push Docker image to Amazon ECR
 
     - name: Check kubectl version  # Step to check kubectl version
-    run: kubectl version --client  # Display kubectl version
+      run: kubectl version --client  # Display kubectl version
 
     - name: Display kubectl help  # Step to display kubectl help
-    run: kubectl help  # Display kubectl help information
+      run: kubectl help  # Display kubectl help information
 
     - name: Install Kustomize  # Step to install Kustomize
-    run: |  # Define the shell command to be executed
-      curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash  # Download and install Kustomize
-      sudo mv kustomize /usr/local/bin/  # Move Kustomize binary to a directory in PATH
+      run: |  # Define the shell command to be executed
+          curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash  # Download and install Kustomize
+          sudo mv kustomize /usr/local/bin/  # Move Kustomize binary to a directory in PATH
 
     - name: Check Kustomize version  # Step to check Kustomize version
-    run: kustomize version  # Display Kustomize version
+      run: kustomize version  # Display Kustomize version
 
     - name: Update AWS CLI  # Step to update AWS CLI
-    run: |  # Define the shell command to be executed
-      sudo apt-get install -y awscli  # Install AWS CLI
-      aws --version  # Display AWS CLI version
+      run: |  # Define the shell command to be executed
+          sudo apt-get install -y awscli  # Install AWS CLI
+          aws --version  # Display AWS CLI version
 
     - name: Add AWS EKS cluster to kubeconfig  # Step to add AWS EKS cluster to kubeconfig
-    run: |  # Define the shell command to be executed
-      AWS_REGION=us-east-1  # Specify AWS region
-      EKS_CLUSTER_NAME=cluster  # Specify EKS cluster name
-      KUBECONFIG_PATH=/home/runner/.kube/config  # Specify kubeconfig file path
-      aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME} --kubeconfig $KUBECONFIG_PATH  # Add EKS cluster to kubeconfig
-      cat $KUBECONFIG_PATH  # Display updated kubeconfig content for verification
-    env:  # Define environment variables for the step
-      KUBECONFIG: /home/runner/.kube/config  # Specify kubeconfig file path as an environment variable
+      run: |  # Define the shell command to be executed
+        AWS_REGION=us-east-1  # Specify AWS region
+        EKS_CLUSTER_NAME=cluster  # Specify EKS cluster name
+        KUBECONFIG_PATH=/home/runner/.kube/config  # Specify kubeconfig file path
+        aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME} --kubeconfig $KUBECONFIG_PATH  # Add EKS cluster to kubeconfig
+        cat $KUBECONFIG_PATH  # Display updated kubeconfig content for verification
+      env:  # Define environment variables for the step
+        KUBECONFIG: /home/runner/.kube/config  # Specify kubeconfig file path as an environment variable
 
     - name: Check kubectl commands  # Step to check kubectl commands
-    run: kubectl get pods  # Display pods in the Kubernetes cluster
+      run: kubectl get pods  # Display pods in the Kubernetes cluster
 
     - name: Deploy to EKS  # Step to deploy to EKS
-    run: |  # Define the shell command to be executed
-      cd starter/frontend/k8s  # Change directory to the Kubernetes manifests directory
-      kustomize edit set image frontend=633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Update Docker image in Kubernetes manifest
+      run: |  # Define the shell command to be executed
+        cd starter/frontend/k8s  # Change directory to the Kubernetes manifests directory
+        kustomize edit set image frontend=633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Update Docker image in Kubernetes manifest
     
     - name: Apply the manifests to the cluster  # Step to apply Kubernetes manifests to the cluster
       run: |
