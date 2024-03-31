@@ -120,7 +120,7 @@ jobs:
         cd starter/frontend/  # Change directory to the frontend directory
         docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 -t frontend .  # Build Docker image
         docker tag frontend:latest 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Tag Docker image
-        docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Push Docker image to ECR
+        docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
           
     - name: Install kubectl  # Step to install kubectl
     run: |  # Define the shell command to be executed
