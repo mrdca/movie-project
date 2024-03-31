@@ -204,18 +204,12 @@ jobs:  # Define jobs to be executed in the workflow
       run: |
         cd starter/backend/k8s  # Change directory to the Kubernetes manifest directory
         kustomize build | kubectl apply -f - --validate=false  # Build and apply Kubernetes manifests, skipping validation
-    
-    - name: Get pod status
-      id: get_pod_status
-      run: |
-        pod_status=$(kubectl get pod -l app=backend -o jsonpath='{.status.phase}')
-        echo "::set-output name=status::$pod_status"
 
     - name: Check container status
       run: |
-        if [[ "${{ steps.get_pod_status.outputs.status }}" == "Running" ]]; then
-          echo "Container is running"
-        else
-          echo "Container is not running"
-          exit 1
-        fi
+          if kubectl get pods -n default -l app=backend | grep -q "Running"; then
+            echo "Container is running"
+          else
+            echo "Container is not running"
+            exit 1
+          fi
