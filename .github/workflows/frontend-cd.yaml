@@ -111,22 +111,16 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v2  # Use AWS Actions to perform ECR login
 
     - name: Build, tag, and push image to Amazon ECR  # Step to build, tag, and push Docker image to Amazon ECR
-    env:  # Define environment variables for the step
-      ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}  # Get ECR registry from previous step
-      ECR_REPOSITORY: frontend  # Name of the ECR repository
-      IMAGE_TAG: ${{ github.sha }}  # GitHub commit SHA as the image tag
-    run: |  # Define the shell commands to be executed
-        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 633011985446.dkr.ecr.us-east-1.amazonaws.com  # Log in to ECR
-        cd starter/frontend/  # Change directory to the frontend directory
-        docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 -t frontend .  # Build Docker image
-        docker tag frontend:latest 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Tag Docker image
-        docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
-          
-    - name: Install kubectl  # Step to install kubectl
-    run: |  # Define the shell command to be executed
-      curl -sLO https://storage.googleapis.com/kubernetes-release/release/v1.19.9/bin/linux/amd64/kubectl  # Download kubectl binary
-      chmod +x ./kubectl  # Make kubectl binary executable
-      sudo mv ./kubectl /usr/local/bin/  # Move kubectl binary to a directory in PATH
+      env: 
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}  # Get ECR registry from previous step
+        ECR_REPOSITORY: frontend  # Name of the ECR repository
+        IMAGE_TAG: ${{ github.sha }}  # GitHub commit SHA as the image tag
+      run: |  # Define the shell commands to be executed
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 633011985446.dkr.ecr.us-east-1.amazonaws.com  # Log in to ECR
+          cd starter/frontend/  # Change directory to the frontend directory
+          docker build --build-arg=REACT_APP_MOVIE_API_URL=http://localhost:5000 -t frontend .  # Build Docker image
+          docker tag frontend:latest 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Tag Docker image
+          docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Push Docker image to Amazon ECR
 
     - name: Check kubectl version  # Step to check kubectl version
     run: kubectl version --client  # Display kubectl version
