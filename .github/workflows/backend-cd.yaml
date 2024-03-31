@@ -145,7 +145,7 @@ jobs:  # Define jobs to be executed in the workflow
           docker build -t backend .  # Build Docker image
           docker tag backend:latest 633011985446.dkr.ecr.us-east-1.amazonaws.com/backend:latest  # Tag Docker image
           docker push 633011985446.dkr.ecr.us-east-1.amazonaws.com/backend:latest  # Push Docker image to Amazon ECR
-          
+
     - name: Install kubectl  # Step to install kubectl
       run: |
         curl -sLO https://storage.googleapis.com/kubernetes-release/release/v1.19.9/bin/linux/amd64/kubectl  # Download kubectl binary
@@ -206,7 +206,7 @@ jobs:  # Define jobs to be executed in the workflow
         kustomize build | kubectl apply -f - --validate=false  # Build and apply Kubernetes manifests, skipping validation
     
     - name: Get pod status
-    id: get_pod_status
+      id: get_pod_status
       run: |
         pod_status=$(kubectl get pod -l app=backend -o jsonpath='{.status.phase}')
         echo "::set-output name=status::$pod_status"

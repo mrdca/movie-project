@@ -171,7 +171,7 @@ jobs:
         kustomize build | kubectl apply -f - --validate=false  # Build and apply Kubernetes manifests, skipping validation
 
     - name: Get pod status
-    id: get_pod_status
+      id: get_pod_status
       run: |
         pod_status=$(kubectl get pod -l app=frontend -o jsonpath='{.status.phase}')
         echo "::set-output name=status::$pod_status"
