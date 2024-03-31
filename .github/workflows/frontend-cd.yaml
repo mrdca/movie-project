@@ -172,4 +172,25 @@ jobs:
 
     - name: Deploy to EKS  # Step to deploy to EKS
     run: |  # Define the shell command to be executed
-    cd starter/frontend/k8s  # Change directory to the Kubernetes manifests directory
+      cd starter/frontend/k8s  # Change directory to the Kubernetes manifests directory
+      kustomize edit set image frontend=633011985446.dkr.ecr.us-east-1.amazonaws.com/frontend:latest  # Update Docker image in Kubernetes manifest
+    
+    - name: Apply the manifests to the cluster  # Step to apply Kubernetes manifests to the cluster
+      run: |
+        cd starter/frontend/k8s  # Change directory to the Kubernetes manifest directory
+        kustomize build | kubectl apply -f - --validate=false  # Build and apply Kubernetes manifests, skipping validation
+
+    - name: Get pod status
+    id: get_pod_status
+      run: |
+        pod_status=$(kubectl get pod -l app=frontend -o jsonpath='{.status.phase}')
+        echo "::set-output name=status::$pod_status"
+
+    - name: Check container status
+      run: |
+        if [[ "${{ steps.get_pod_status.outputs.status }}" == "Running" ]]; then
+          echo "Container is running"
+        else
+          echo "Container is not running"
+          exit 1
+        fi
